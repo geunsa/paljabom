@@ -351,6 +351,32 @@ body {
   opacity: 0.9;
 }
 
+.cta-sub {
+  background: var(--cream2);
+  color: var(--pink-dk);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  width: 100%;
+  padding: 8px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Noto Serif KR', serif;
+  letter-spacing: 0.2px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(42, 26, 46, 0.05);
+  box-sizing: border-box;
+}
+
+.cta-sub:active {
+  opacity: 0.9;
+  background: var(--pink-lt);
+}
+
 .saved-row {
   display: flex;
   gap: 4px;
@@ -1663,9 +1689,6 @@ body {
 }
 #pageResult.drawing-active .topbar .avatar {
   display: none;
-}
-#pageResult.drawing-active .topbar #saveCurrentProfileBtn {
-  margin-right: 4px;
 }
 #pageResult.drawing-active .topbar #editCurrentInputBtn {
   margin-right: 4px;
