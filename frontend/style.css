@@ -933,10 +933,11 @@ body {
 /* 대운 */
 .dw-row {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   overflow-x: auto;
   padding-bottom: 2px;
   direction: rtl;
+  justify-content: flex-start;
 }
 
 .dw-item {
@@ -949,6 +950,7 @@ body {
   padding: 2px;
   border-radius: 8px;
   direction: ltr;
+  width: 36px;
 }
 
 .dw-age {
@@ -960,7 +962,8 @@ body {
 }
 
 .dw-top {
-  width: 36px;
+  width: 100%;
+  max-width: 36px;
   height: 34px;
   border-radius: 7px 7px 0 0;
   display: flex;
@@ -969,10 +972,12 @@ body {
   font-size: 17px;
   font-weight: 700;
   border: 1px solid rgba(0,0,0,0.03);
+  box-sizing: border-box;
 }
 
 .dw-bot {
-  width: 36px;
+  width: 100%;
+  max-width: 36px;
   height: 34px;
   border-radius: 0 0 7px 7px;
   display: flex;
@@ -983,6 +988,27 @@ body {
   margin-bottom: 2px;
   border: 1px solid rgba(0,0,0,0.03);
   border-top: none;
+  box-sizing: border-box;
+}
+
+/* 태블릿 및 넓은 기기에서는 대운 12개 타일이 꽉 차고 세운처럼 균등 분할로 확장되게 자동 조절 */
+@media (min-width: 380px) {
+  .dw-row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+    justify-content: space-between;
+    overflow-x: visible;
+  }
+  .dw-item {
+    width: 100%;
+  }
+  .dw-top {
+    max-width: 100%;
+  }
+  .dw-bot {
+    max-width: 100%;
+  }
 }
 
 .dw-yr {
@@ -1789,22 +1815,37 @@ body {
 }
 #pageResult.drawing-active .dw-item {
   padding: 1px;
+  width: 28px;
 }
 #pageResult.drawing-active .dw-age {
   font-size: 8px;
   margin-bottom: 1px;
 }
 #pageResult.drawing-active .dw-top {
-  width: 28px;
+  width: 100%;
+  max-width: 28px;
   height: 26px;
   font-size: 14px;
   border-radius: 5px 5px 0 0;
 }
 #pageResult.drawing-active .dw-bot {
-  width: 28px;
+  width: 100%;
+  max-width: 28px;
   height: 26px;
   font-size: 14px;
   border-radius: 0 0 5px 5px;
+}
+
+@media (min-width: 380px) {
+  #pageResult.drawing-active .dw-item {
+    width: 100%;
+  }
+  #pageResult.drawing-active .dw-top {
+    max-width: 100%;
+  }
+  #pageResult.drawing-active .dw-bot {
+    max-width: 100%;
+  }
 }
 #pageResult.drawing-active .dw-yr {
   font-size: 8px;

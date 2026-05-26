@@ -154,12 +154,6 @@
       </div>
       <!-- Edit Input Button -->
       <button id="editCurrentInputBtn" onclick="editCurrentCalculatedProfile()" style="background: rgba(245,192,216,0.12); color: #F5C8DC; border: 1px solid rgba(245,192,216,0.35); padding: 4px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 500; cursor: pointer; font-family: sans-serif; margin-right: 10px; flex-shrink: 0;">수정</button>
-      <!-- Print button -->
-      <svg id="printResultBtn" onclick="printSajuResult()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(245,192,216,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer; margin-right: 10px;" title="결과 인쇄 (PDF 저장)">
-        <polyline points="6 9 6 2 18 2 18 9"/>
-        <path d="M6 18H4a2 2 0 0 0-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 0-2 2h-2"/>
-        <rect x="6" y="14" width="12" height="8"/>
-      </svg>
       <!-- Export Image button -->
       <svg id="exportImageBtn" onclick="exportSajuAsImage()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(245,192,216,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;" title="이미지로 저장 (전송용)">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -285,9 +279,7 @@
       <!-- ⑦ 상담 메모 섹션 (Captured in print/image) -->
       <div class="section" id="resultMemoSection" style="display: none;">
         <div class="sec-label">상담 메모 · Notes</div>
-        <div id="resultMemoContent" style="font-size: 11.5px; color: var(--tx); line-height: 1.6; white-space: pre-wrap; font-family: 'Noto Serif KR', serif; background: var(--cream2); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--bd2);">
-          <!-- Dynamically populated -->
-        </div>
+        <textarea id="resultMemoContent" oninput="syncResultMemoToTextarea(this.value)" style="width: 100%; min-height: 140px; font-size: 11.5px; color: var(--tx); line-height: 1.6; font-family: 'Noto Serif KR', serif; background: var(--cream2); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--bd2); resize: none; outline: none; box-sizing: border-box;"></textarea>
       </div>
     </div>
   </div>

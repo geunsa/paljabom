@@ -929,16 +929,23 @@ function deleteRecentSearch(event, name, birthdate) {
 
 // ══ 8. Memo Section ══
 function updateResultMemoDisplay() {
-  const val = document.getElementById("memoTextArea").value.trim();
+  const val = document.getElementById("memoTextArea").value;
   const memoSec = document.getElementById("resultMemoSection");
   const memoContent = document.getElementById("resultMemoContent");
   if (memoSec && memoContent) {
     if (val) {
       memoSec.style.display = "block";
-      memoContent.textContent = val;
+      memoContent.value = val;
     } else {
       memoSec.style.display = "none";
     }
+  }
+}
+
+function syncResultMemoToTextarea(val) {
+  const memoTextarea = document.getElementById("memoTextArea");
+  if (memoTextarea) {
+    memoTextarea.value = val;
   }
 }
 
