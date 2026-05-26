@@ -991,25 +991,7 @@ body {
   box-sizing: border-box;
 }
 
-/* 태블릿 및 넓은 기기에서는 대운 12개 타일이 꽉 차고 세운처럼 균등 분할로 확장되게 자동 조절 */
-@media (min-width: 480px) {
-  .dw-row {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 3px;
-    justify-content: space-between;
-    overflow-x: visible;
-  }
-  .dw-item {
-    width: 100%;
-  }
-  .dw-top {
-    max-width: 100%;
-  }
-  .dw-bot {
-    max-width: 100%;
-  }
-}
+
 
 .dw-yr {
   font-size: 9px;
@@ -1836,17 +1818,7 @@ body {
   border-radius: 0 0 5px 5px;
 }
 
-@media (min-width: 480px) {
-  #pageResult.drawing-active .dw-item {
-    width: 100%;
-  }
-  #pageResult.drawing-active .dw-top {
-    max-width: 100%;
-  }
-  #pageResult.drawing-active .dw-bot {
-    max-width: 100%;
-  }
-}
+
 #pageResult.drawing-active .dw-yr {
   font-size: 8px;
 }
