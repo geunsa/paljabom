@@ -2,9 +2,9 @@
 let currentSaju = null;
 let compatSaju1 = null;
 let compatSaju2 = null;
-let selectedGender = "남성";
+let selectedGender = null;
 let selectedCalendar = "양력";
-let selectedHourOffset = 21; // Default to 亥시 (21)
+let selectedHourOffset = -1; // Default to 모름 (-1)
 let selectedDaewoonIdx = null;
 let selectedSewoonYear = null;
 let showOptions = {
@@ -134,6 +134,10 @@ async function submitSajuForm() {
     alert("이름을 입력해주세요.");
     return;
   }
+  if (!selectedGender) {
+    alert("성별을 선택해주세요.");
+    return;
+  }
   if (!birthdate || birthdate.length !== 8) {
     alert("생년월일 8자리를 입력해주세요. (예: 19801231)");
     return;
@@ -209,6 +213,10 @@ async function saveInputProfileDirectly() {
   
   if (!name) {
     alert("이름을 입력해주세요.");
+    return;
+  }
+  if (!selectedGender) {
+    alert("성별을 선택해주세요.");
     return;
   }
   if (!birthdate || birthdate.length !== 8) {
