@@ -1,0 +1,22 @@
+{
+  "short_name": "팔자봄",
+  "name": "팔자봄 만세력",
+  "description": "8자로 봄 - 팔자봄 만세력",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#1E1122",
+  "theme_color": "#1E1122",
+  "display": "standalone",
+  "orientation": "portrait"
+}

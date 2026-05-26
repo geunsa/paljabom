@@ -6,6 +6,11 @@
 <title>팔자봄 만세력</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="팔자봄">
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 
@@ -14,10 +19,10 @@
   <!-- ════ PAGE 1: INPUT (입력) ════ -->
   <div class="page show" id="pageInput">
     <!-- APP HEADER -->
-    <div class="apphead">
-      <div>
-        <div class="logo">팔자봄 만세력 <span class="star">✦</span></div>
-        <div class="head-sub">8자로 봄</div>
+    <div class="apphead welcome-head">
+      <div class="welcome-wrap">
+        <div class="logo welcome-logo">팔자봄 만세력 <span class="star">✦</span></div>
+        <div class="head-sub welcome-sub">팔자로 본 나의 운명.</div>
       </div>
     </div>
     
@@ -349,6 +354,13 @@
 <!-- API connectivity settings (useful if deployed) -->
 <script>
   window.BACKEND_API_BASE = ""; // points to relative path since backend mounts static folder
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered!', reg))
+        .catch(err => console.log('Service worker registration failed:', err));
+    });
+  }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="app.js"></script>
