@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>팔자봄 만세력</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ════ PAGE 1: INPUT (입력) ════ -->
+  <div class="page show" id="pageInput">
+    <!-- APP HEADER -->
+    <div class="apphead">
+      <div>
+        <div class="logo">팔자봄 만세력 <span class="star">✦</span></div>
+        <div class="head-sub">8자로 봄</div>
+      </div>
+    </div>
+    
+    <div class="input-page">
+
+
+      <div class="icard">
+        <!-- 이름 + 성별 -->
+        <div class="fsplit">
+          <div>
+            <div class="flabel">이름</div>
+            <input class="finput" type="text" placeholder="홍길동" id="nameIn">
+          </div>
+          <div>
+            <div class="flabel">성별</div>
+            <div class="tgroup">
+              <div class="tbtn sel" id="btnGenderMale" onclick="selectGender('남성')">남자</div>
+              <div class="tbtn" id="btnGenderFemale" onclick="selectGender('여성')">여자</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hdivider"></div>
+
+        <!-- 생년월일 + 양음력 -->
+        <div class="fsplit">
+          <div>
+            <div class="flabel">생년월일</div>
+            <input class="finput" type="text" placeholder="19801231" id="birthIn" maxlength="8">
+          </div>
+          <div>
+            <div class="flabel">양력/음력</div>
+            <div class="tgroup" style="flex-wrap:wrap;gap:4px;">
+              <div class="tbtn sel-g" id="btnCalSolar" onclick="selectCalendar('양력')">양력</div>
+              <div class="tbtn" id="btnCalLunar" onclick="selectCalendar('음력')">음력</div>
+              <div class="tbtn" id="btnCalLeap" onclick="selectCalendar('윤달')">윤달</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hdivider"></div>
+
+        <!-- 출생시간 -->
+        <div>
+          <div class="flabel">출생시간 · 시주 선택</div>
+          <div class="timegrid" id="timeGrid">
+            <div class="tcell" data-hour="23" onclick="selectTime(this)"><span class="gj">子</span>23–01</div>
+            <div class="tcell" data-hour="1" onclick="selectTime(this)"><span class="gj">丑</span>01–03</div>
+            <div class="tcell" data-hour="3" onclick="selectTime(this)"><span class="gj">寅</span>03–05</div>
+            <div class="tcell" data-hour="5" onclick="selectTime(this)"><span class="gj">卯</span>05–07</div>
+            <div class="tcell" data-hour="7" onclick="selectTime(this)"><span class="gj">辰</span>07–09</div>
+            <div class="tcell" data-hour="9" onclick="selectTime(this)"><span class="gj">巳</span>09–11</div>
+            <div class="tcell" data-hour="11" onclick="selectTime(this)"><span class="gj">午</span>11–13</div>
+            <div class="tcell" data-hour="13" onclick="selectTime(this)"><span class="gj">未</span>13–15</div>
+            <div class="tcell" data-hour="15" onclick="selectTime(this)"><span class="gj">申</span>15–17</div>
+            <div class="tcell" data-hour="17" onclick="selectTime(this)"><span class="gj">酉</span>17–19</div>
+            <div class="tcell" data-hour="19" onclick="selectTime(this)"><span class="gj">戌</span>19–21</div>
+            <div class="tcell sel" data-hour="21" onclick="selectTime(this)"><span class="gj">亥</span>21–23</div>
+            <div class="tcell" data-hour="-1" onclick="selectTime(this)" style="grid-column:1/3;"><span class="gj" style="font-size:14px;">모름</span>시간불명</div>
+          </div>
+        </div>
+
+        <button class="cta-main" onclick="submitSajuForm()">사주 조회하기 ✦</button>
+      </div>
+
+      <!-- 최근 검색 칩 -->
+      <div class="saved-row" id="recentSearches">
+        <span style="font-size:10px;color:var(--muted);font-family:sans-serif;align-self:center;">최근</span>
+        <!-- Chips populated dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE 2: SAVED LIST (저장 목록) ════ -->
+  <div class="page" id="pageSaved">
+    <!-- APP HEADER -->
+    <div class="apphead">
+      <div>
+        <div class="logo">팔자봄 만세력 <span class="star">✦</span></div>
+        <div style="font-size:10px;color:rgba(240,192,216,0.38);font-family:sans-serif;margin-top:1px;">저장된 사주 목록</div>
+      </div>
+    </div>
+    
+    <!-- BODY -->
+    <div class="body">
+      <!-- 검색·정렬 -->
+      <div class="search-wrap">
+        <div class="sort-row">
+          <span style="font-size:11px;color:#C4A0B8;font-family:sans-serif;">정렬</span>
+          <div class="sort-btn sel" id="sortNameAsc" onclick="changeSort('nameAsc')">이름 ▲</div>
+          <div class="sort-btn" id="sortNameDesc" onclick="changeSort('nameDesc')">이름 ▼</div>
+          <div class="sort-btn" id="sortRecent" onclick="changeSort('recent')">최근순</div>
+        </div>
+        <div class="search-row">
+          <input class="search-input" type="text" placeholder="이름으로 검색" id="searchInput" oninput="filterProfilesList()">
+          <button class="search-btn" onclick="filterProfilesList()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 안내 -->
+      <div class="sel-info">
+        <div class="sel-dot"></div>
+        <span class="sel-txt">선택하면 사주 원국이 바로 열려요</span>
+      </div>
+
+      <!-- 목록 -->
+      <div class="list-wrap" id="listWrap">
+        <!-- List items populated dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE 3: RESULT & CYCLES (원국 및 운세) ════ -->
+  <div class="page" id="pageResult">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div style="flex:1; margin-left: 4px;">
+        <div class="top-year" id="topHeaderName">홍길동 <span style="font-size:11px;color:rgba(245,200,120,0.55); font-family:sans-serif;" id="topHeaderAge">(1세)</span></div>
+        <div class="top-dates" id="topHeaderDates">
+          (양) 1980년 12월 31일, 22시 00분<br>
+          (음) 1980년 11월 25일
+        </div>
+      </div>
+      <!-- Save to Local Storage icon -->
+      <svg id="saveCurrentProfileBtn" onclick="saveCurrentCalculatedProfile()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(245,192,216,0.85)" stroke-width="1.8" stroke-linecap="round" style="cursor: pointer; margin-right: 10px;" title="현재 명식 저장">
+        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/>
+        <polyline points="7 3 7 8 15 8"/>
+      </svg>
+      <!-- Print button -->
+      <svg id="printResultBtn" onclick="printSajuResult()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(245,192,216,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer; margin-right: 10px;" title="결과 인쇄 (PDF 저장)">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 0 0-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 0-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      <!-- Export Image button -->
+      <svg id="exportImageBtn" onclick="exportSajuAsImage()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(245,192,216,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;" title="이미지로 저장 (전송용)">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+    </div>
+
+    <!-- DRAWING TOOLBAR -->
+    <div class="draw-toolbar" id="drawToolbar">
+      <div class="dt-main-row">
+        <button class="dt-btn" id="btnDrawToggle" onclick="toggleDrawingMode()">🎨 필기 모드 OFF</button>
+        <button class="dt-btn" id="btnDrawClear" onclick="clearCanvas()">🧹 전체 지우기</button>
+        <button class="dt-btn" id="btnUndo" onclick="handleUndo()" disabled>↩️ 실행 취소</button>
+      </div>
+      <div class="dt-sub-row" id="drawSubRow" style="display: none; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+          <!-- Tools selector -->
+          <div class="dt-tools">
+            <button class="dt-tool" data-tool="pan" onclick="selectDrawTool('pan')" title="화면 이동">✋</button>
+            <button class="dt-tool active" data-tool="pencil" onclick="selectDrawTool('pencil')">✏️</button>
+            <button class="dt-tool" data-tool="highlighter" onclick="selectDrawTool('highlighter')">🖌️</button>
+            <button class="dt-tool" data-tool="eraser" onclick="selectDrawTool('eraser')">🧽</button>
+            <button class="dt-tool" data-tool="star" onclick="selectDrawTool('star')">★</button>
+            <button class="dt-tool" data-tool="heart" onclick="selectDrawTool('heart')">♥</button>
+            <button class="dt-tool" data-tool="o" onclick="selectDrawTool('o')">○</button>
+            <button class="dt-tool" data-tool="x" onclick="selectDrawTool('x')">✕</button>
+          </div>
+          <!-- Color Dots selector -->
+          <div class="dt-colors">
+            <div class="dt-color active" style="background-color: #E8402A;" onclick="selectPenColor('#E8402A', this)" title="빨간색"></div>
+            <div class="dt-color" style="background-color: #2060C8;" onclick="selectPenColor('#2060C8', this)" title="파란색"></div>
+            <div class="dt-color" style="background-color: #389040;" onclick="selectPenColor('#389040', this)" title="초록색"></div>
+            <div class="dt-color" style="background-color: #E8A830;" onclick="selectPenColor('#E8A830', this)" title="황토색"></div>
+            <div class="dt-color" style="background-color: #8E24AA;" onclick="selectPenColor('#8E24AA', this)" title="보라색"></div>
+            <div class="dt-color" style="background-color: #1A1A1A;" onclick="selectPenColor('#1A1A1A', this)" title="검은색"></div>
+            <div class="dt-color" style="background-color: #78909C;" onclick="selectPenColor('#78909C', this)" title="회색"></div>
+          </div>
+        </div>
+        <!-- Pen Thickness Slider -->
+        <div style="display: flex; align-items: center; gap: 8px; width: 100%; border-top: 1px dashed var(--bd2); padding-top: 6px;">
+          <span style="font-size: 10px; color: var(--muted); font-family: sans-serif; min-width: 50px;">두께: <span id="thicknessVal">5px</span></span>
+          <input type="range" id="thicknessSlider" min="2" max="60" value="5" step="1" oninput="changeBrushSize(this.value)" style="flex: 1; accent-color: var(--pink); height: 4px; border-radius: 2px;">
+        </div>
+      </div>
+    </div>
+
+    <div class="result-scroll-container" id="resultScrollContainer" style="position: relative;">
+      <canvas id="globalDrawingCanvas" style="position: absolute; top: 0; left: 0; z-index: 10; pointer-events: none; mix-blend-mode: multiply;"></canvas>
+      <!-- ① 원국 섹션 -->
+      <div class="section">
+        <div class="sec-label">사주 원국 · 四柱原局</div>
+
+        <!-- 충·합 관계 표시 행 -->
+        <div class="rel-row" id="relationsRow" style="display: none;">
+          <!-- relations render dynamically -->
+        </div>
+
+        <!-- 한자 타일 기둥 -->
+        <div class="pillar-row" id="pillarRow">
+          <!-- Pillars populated dynamically: 시주, 일주, 월주, 년주 -->
+        </div>
+
+        <!-- 옵션 체크 칩 -->
+        <div class="option-row">
+          <div class="opt-chip" id="optSipseong" onclick="toggleOptionChip(this, 'sipseong')">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="12" height="12" rx="2"/></svg>
+            십성
+          </div>
+          <div class="opt-chip" id="optSinsal" onclick="toggleOptionChip(this, 'sinsal')">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="12" height="12" rx="2"/></svg>
+            신살
+          </div>
+          <div class="opt-chip" id="optUnseong" onclick="toggleOptionChip(this, 'unseong')">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="12" height="12" rx="2"/></svg>
+            12운성
+          </div>
+          <div class="opt-chip on" id="optRelations" onclick="toggleOptionChip(this, 'relations')">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="12" height="12" rx="2"/><polyline points="3,7 5.5,9.5 11,4" stroke-width="1.8"/></svg>
+            형충회합
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- ③ 대운 섹션 -->
+      <div class="section">
+        <div class="sec-label">대운 · 大運 <span style="color:#E8A830;font-size:10px;margin-left:4px;" id="daewoonHeaderInfo">순행 · 대운수 4</span></div>
+        <div style="position: relative; width: 100%;">
+          <div class="dw-row" id="daewoonList">
+            <!-- daewoons render dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 세운 섹션 -->
+      <div class="section">
+        <div class="sec-label">세운 · 歲運</div>
+        <div class="sw-grid" id="sewoonGrid">
+          <!-- sewoons render dynamically -->
+        </div>
+      </div>
+
+      <!-- ⑤ 월운 섹션 -->
+      <div class="section">
+        <div class="sec-label" id="woluunHeaderLabel">2026년 월운 · 양력</div>
+        <div class="mw-row" id="woluunList">
+          <!-- woluun render dynamically -->
+        </div>
+      </div>
+
+      <!-- ⑥ 일진 달력 섹션 (Embedded dynamically) -->
+      <div class="section" id="calendarSection" style="display: none; margin-bottom: 20px;">
+        <div class="sec-label" id="calendarHeaderLabel">일진 달력 · 2026년 5월</div>
+        <div class="calendar-card" style="padding: 10px 10px;">
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;" id="calendarGrid">
+            <!-- calendar header and day cells render dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑦ 상담 메모 섹션 (Captured in print/image) -->
+      <div class="section" id="resultMemoSection" style="display: none;">
+        <div class="sec-label">상담 메모 · Notes</div>
+        <div id="resultMemoContent" style="font-size: 11.5px; color: var(--tx); line-height: 1.6; white-space: pre-wrap; font-family: 'Noto Serif KR', serif; background: var(--cream2); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--bd2);">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ════ PAGE 4: MEMO (메모장) ════ -->
+  <div class="page" id="pageMemo">
+    <div class="memo-page">
+      <div class="memo-topbar">
+        <div class="memo-topbar-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D4689A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          메모장
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="mbtn" onclick="clearMemoArea()">초기화</button>
+          <button class="mbtn pr" onclick="saveMemoText()">저장</button>
+        </div>
+      </div>
+      
+      <div class="mtags">
+        <span class="mtag" onclick="appendMemoTag('# 용신')"># 용신</span>
+        <span class="mtag" onclick="appendMemoTag('# 격국')"># 격국</span>
+        <span class="mtag" onclick="appendMemoTag('# 대운')"># 대운</span>
+        <span class="mtag" onclick="appendMemoTag('# 합충')"># 합충</span>
+        <span class="mtag g" onclick="appendMemoTag('# 올해운세')"># 올해운세</span>
+        <span class="mtag g" onclick="appendMemoTag('# 직업')"># 직업</span>
+        <span class="mtag" onclick="appendMemoTag('# 관계')"># 관계</span>
+      </div>
+      
+      <div class="memo-scroll">
+        <div class="memo-date" id="memoDateDisplay">2026.05.25</div>
+        <textarea class="mtextarea" id="memoTextArea" placeholder="사주 분석 내용을 자유롭게 메모하세요..."></textarea>
+        
+        <div class="nlist">
+          <div style="font-size:10px;color:var(--muted);font-family:sans-serif;margin-bottom: 6px;">이전 저장 메모 목록</div>
+          <div class="notes-list-scrollable" id="notesListContainer">
+            <!-- Saved memos dynamically listed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ FIXED BOTTOM NAVIGATION (하단 네비) ════ -->
+  <div class="bnav">
+    <div class="nb on" id="nbInput" onclick="showPageTab('input')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+      <span>입력</span>
+    </div>
+    <div class="nb" id="nbSaved" onclick="showPageTab('saved')">
+      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+      <span>저장</span>
+    </div>
+    <div class="nb" id="nbResult" onclick="showPageTab('result')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>원국</span>
+    </div>
+    <div class="nb" id="nbMemo" onclick="showPageTab('memo')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>메모</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- API connectivity settings (useful if deployed) -->
+<script>
+  window.BACKEND_API_BASE = ""; // points to relative path since backend mounts static folder
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
