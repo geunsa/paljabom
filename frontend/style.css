@@ -1667,6 +1667,9 @@ body {
 #pageResult.drawing-active .topbar #saveCurrentProfileBtn {
   margin-right: 4px;
 }
+#pageResult.drawing-active .topbar #editCurrentInputBtn {
+  margin-right: 4px;
+}
 #pageResult.drawing-active .top-dates {
   display: none;
 }

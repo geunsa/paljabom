@@ -184,6 +184,7 @@ async function submitSajuForm() {
     const resData = await response.json();
     if (resData.success) {
       currentSaju = resData.data;
+      currentSaju._originalPayload = payload;
       
       // Auto-prepopulate needed colors in memo pad
       initializeMemoWithColors(currentSaju);
@@ -200,6 +201,149 @@ async function submitSajuForm() {
     console.error(err);
     alert("서버 연결 실패. 백엔드가 구동 중인지 확인해 주세요.");
   }
+}
+
+async function saveInputProfileDirectly() {
+  const name = document.getElementById("nameIn").value.trim();
+  const birthdate = document.getElementById("birthIn").value.trim();
+  
+  if (!name) {
+    alert("이름을 입력해주세요.");
+    return;
+  }
+  if (!birthdate || birthdate.length !== 8) {
+    alert("생년월일 8자리를 입력해주세요. (예: 19801231)");
+    return;
+  }
+  
+  const year = parseInt(birthdate.substring(0, 4));
+  const month = parseInt(birthdate.substring(4, 6));
+  const day = parseInt(birthdate.substring(6, 8));
+  
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    alert("올바른 날짜 형식이 아닙니다.");
+    return;
+  }
+  
+  let hourVal = 12;
+  let minuteVal = 0;
+  let unknownTime = false;
+  
+  if (selectedHourOffset === -1) {
+    unknownTime = true;
+  } else {
+    hourVal = selectedHourOffset;
+  }
+  
+  const saveBtn = document.getElementById("btnDirectSave");
+  try {
+    const payload = {
+      name,
+      gender: selectedGender,
+      calendar_type: selectedCalendar === "윤달" ? "음력(윤달)" : selectedCalendar,
+      year,
+      month,
+      day,
+      hour: hourVal,
+      minute: minuteVal,
+      unknown_time: unknownTime
+    };
+    
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerText = "저장 중...";
+    }
+    
+    const response = await fetch(`${window.BACKEND_API_BASE}/api/calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    const resData = await response.json();
+    if (resData.success) {
+      const sajuData = resData.data;
+      
+      let birthtimeStr = "";
+      if (!unknownTime) {
+        birthtimeStr = String(hourVal).padStart(2, '0') + "00";
+      }
+      
+      const newProfile = {
+        id: Date.now(),
+        name: name,
+        gender: selectedGender,
+        calendar_type: selectedCalendar,
+        birthdate: birthdate,
+        birthtime: birthtimeStr,
+        unknown_time: unknownTime,
+        solar_date_str: sajuData.solar_date,
+        lunar_date_str: sajuData.lunar_date,
+        date_saved: new Date().toISOString()
+      };
+      
+      saveProfileToList(newProfile);
+      alert(`"${name}" 프로필이 저장되었습니다.`);
+      
+      // 저장 목록 탭으로 전환 및 리스트 갱신
+      renderProfilesList();
+      showPageTab("saved");
+    } else {
+      alert(resData.detail || "프로필 저장 중 계산 실패");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("서버 연결 실패. 백엔드가 구동 중인지 확인해 주세요.");
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        현재 입력 정보 저장하기
+      `;
+    }
+  }
+}
+
+function editCurrentCalculatedProfile() {
+  if (!currentSaju || !currentSaju._originalPayload) {
+    alert("수정할 수 있는 원본 명식 데이터가 없습니다.");
+    return;
+  }
+  const payload = currentSaju._originalPayload;
+  
+  // 1. 이름 복원
+  document.getElementById("nameIn").value = payload.name;
+  
+  // 2. 생년월일 복원 (8자리 문자열 결합)
+  const yStr = String(payload.year);
+  const mStr = String(payload.month).padStart(2, '0');
+  const dStr = String(payload.day).padStart(2, '0');
+  document.getElementById("birthIn").value = yStr + mStr + dStr;
+  
+  // 3. 성별 복원
+  selectGender(payload.gender);
+  
+  // 4. 양음력 복원
+  let calType = payload.calendar_type;
+  if (calType === "음력(윤달)") calType = "윤달";
+  selectCalendar(calType);
+  
+  // 5. 출생시간 복원
+  const hourVal = payload.unknown_time ? -1 : payload.hour;
+  selectedHourOffset = hourVal;
+  
+  document.querySelectorAll("#timeGrid .tcell").forEach(cell => {
+    const cellHour = parseInt(cell.getAttribute("data-hour"));
+    if (cellHour === hourVal) {
+      cell.classList.add("sel");
+    } else {
+      cell.classList.remove("sel");
+    }
+  });
+  
+  // 6. 입력 페이지로 전환
+  showPageTab("input");
 }
 
 // ══ 4. Results Rendering ══
