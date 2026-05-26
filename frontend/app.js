@@ -512,7 +512,7 @@ function renderDaewoonList() {
     
     container.innerHTML += `
       <div class="dw-item" onclick="onDaewoonClick(${idx}, ${d.age})">
-        <div class="dw-age ${isNow ? 'now-age' : ''}">${d.age}세 ${isNow ? '★' : ''}</div>
+        <div class="dw-age ${isNow ? 'now-age' : ''}">${d.age}세</div>
         <div class="dw-top ${isNow ? 'now-top' : `${stemCol}-lt`}">${d.stem}</div>
         <div class="dw-bot ${isNow ? 'now-bot' : `${branchCol}-lt`}">${d.branch}</div>
         <div class="dw-yr ${isNow ? 'now-yr' : ''}">${currentSaju.birth_year + d.age - 1}</div>
@@ -540,7 +540,7 @@ function renderSewoonGrid() {
     
     container.innerHTML += `
       <div class="sw-item" onclick="onSewoonClick(${s.year})">
-        <div class="sw-yr ${isNow ? 'now-yr' : ''}">${s.year} ${isNow ? '★' : ''}</div>
+        <div class="sw-yr ${isNow ? 'now-yr' : ''}">${s.year}</div>
         <div class="sw-top ${isNow ? 'now-top' : `${stemCol}-lt`}">${s.stem}</div>
         <div class="sw-bot ${isNow ? 'now-bot' : `${branchCol}-lt`}">${s.branch}</div>
       </div>
